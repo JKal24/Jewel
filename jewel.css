@@ -1,0 +1,37 @@
+#board {
+   height: 100%;
+   width: 100%;
+   display: hidden;
+   grid-template-columns: repeat(8, 1fr);
+   grid-template-rows: repeat(10, 1fr);
+}
+
+.box {
+   height: 50px;
+   width: 50px;
+}
+
+#startContainer {
+   height: 100%;
+   width: 100%;
+   position: absolute;
+   text-align: center;
+}
+
+#startbutton {
+   display:inline-block;
+   text-align: center;
+}
+
+#restartbutton {
+   display:inline-block;
+   text-align: center;
+}
+
+#endContainer {
+   display: hidden;
+   height: 100%;
+   width: 100%;
+   position: absolute;
+   text-align: center;
+}
