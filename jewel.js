@@ -1,8 +1,17 @@
 let positions = [];
 let id = 0;
-let colours = ["#FF0000", "#800000", "#FFFF00", "#808000", "#FA8072", "#999999"]
+let colours = ["#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#800000", "#800000", "#800000", "#800000", "#800000", "#800000", "#800000", "#FFFF00", "#FFFF00", "#FFFF00", "#FFFF00", "#FFFF00", "#808000", "#808000", "#808000", "#FA8072", "#FA8072", "#999999"]
+let pointValue = {
+   "#FF0000" : 1,
+   "#800000" : 2,
+   "#FFFF00" : 3,
+   "#808000" : 5,
+   "#FA8072" : 7,
+   "#999999" : 10
+}
 let board = document.getElementById("board");
 let iteration;
+let points = 0;
 
 /* initialization of my board and creation of elements */
 function initializeBoard() {
@@ -11,10 +20,13 @@ function initializeBoard() {
    $("#board").css("position", "absolute");
    $("#board").width = window.innerWidth;
    $("#board").height = window.innerHeight;
+   $("#score").show();
+   $("#score").text("Score: " + points.toString());
 }
 
 $(document).ready(function () {
    $("#endContainer").hide();
+   $("#score").hide();
    $("#startButton").click(function () {
       $("#startContainer").hide();
       initializeBoard();
@@ -50,7 +62,7 @@ function createPiece() {
    let cl = Math.floor(Math.random() * (colours.length - 1));
    let position = {
       x: [rand, rand + 1],
-      y: [1, 2],
+      y: [2, 3],
       id: "part" + id.toString(),
       colour: colours[cl]
    }
@@ -115,7 +127,7 @@ function intervalChange() {
 /* check if there is a matching combination */
 
 function checkBreaker(obj) {
-   if (obj.y[0] >= 10 || (positions.filter
+   if (obj.y[0] >= 11 || (positions.filter
       (proximity => (proximity.y[0] == (obj.y[0] + 1)) && (proximity.x[0] == obj.x[0]))).length != 0) {
 
       if ((positions.filter(gameOver => (gameOver.y[0] == obj.y[0]) && (gameOver.x[0] == obj.x[0]) && (obj.y[0] <= 2))).length > 1) {
@@ -226,6 +238,8 @@ function checkSpaces(obj) {
          if (cleaned) {
             remove(obj.id);
             clean(obj.id);
+            points += pointValue.obj.colour;
+            $("#score").text("Score: " + points.toString());
             realignBlocks(obj, upper[0], lower[0], closeObj[piece]);
          }
       }

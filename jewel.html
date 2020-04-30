@@ -13,9 +13,19 @@
 </head>
 <body>
    <div id="startContainer">
-      <button id="startButton" class = "btn btn-primary">Start game!</button>
+      <p id="instructions">Points are distributed as follows</p>
+      <h1><div id="???block"></div> is worth 10 points.</h1>
+      <h3><div id="redblock"></div> is worth 1 point.</h3>
+      <button id="startButton" class = "btn btn-primary">Proceed to choose your difficulty!</button>
    </div>
+   <div id="difficulty">
+      <p> Choose your level of difficulty </p>
+         <button id="easy" class= "btn btn-success">Easy</button>
+         <button id="medium" class= "btn btn-warning">Medium</button>
+         <button id="hard" class= "btn btn-danger">Hard</button>
+    </div>
    <div id="board">
+      <div id="score"></div>
    </div>
    <div id="endContainer">
       <p>You lost!</p>

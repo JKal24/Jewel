@@ -3,7 +3,17 @@
    width: 100%;
    display: hidden;
    grid-template-columns: repeat(8, 1fr);
-   grid-template-rows: repeat(10, 1fr);
+   grid-template-rows: repeat(11, 1fr);
+   background-color: lightblue;
+}
+
+#score {
+   display: hidden;
+   grid-row: 1 / 2;
+   grid-column: 4 / span 2;
+   margin: auto;
+   border: 2px solid black;
+   font-size: 18px;
 }
 
 .box {
@@ -18,7 +28,7 @@
    text-align: center;
 }
 
-#startbutton {
+#btn {
    display:inline-block;
    text-align: center;
 }
