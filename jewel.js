@@ -87,7 +87,7 @@ function moveOneDown(int) {
 function moveSides(direc) {
    let objx = ($("#" + positions[positions.length - 1].id).css("grid-column")).split(" / ");
 
-   if ((objx[0] < 8 || (objx[0] == 8 && direc == -1)) && (objx[0] > 1 || objx[0] == 1 && direc == 1) 
+   if ((objx[0] < 8 || (objx[0] == 8 && direc == -1)) && (objx[0] > 1 || (objx[0] == 1 && direc == 1))
    && noCollision(positions[positions.length - 1], direc)) {
       positions[positions.length - 1].x = [parseInt(objx[0]) + direc,
       parseInt(objx[1]) + direc];
@@ -264,12 +264,13 @@ function cleaner(ele) {
 }
 
 function realignBlocks() {
+   usableArgs = arguments.filter(arg => arg.length > 0);
    let recheck = [];
-   for (let moveDown = 0; moveDown < arguments.length; moveDown++) {
+   for (let moveDown = 0; moveDown < usableArgs.length; moveDown++) {
       for (let blockAbove = 0; blockAbove < positions.length; 
          blockAbove++) {
-         if (positions[blockAbove].y[0] <= arguments[moveDown].y[0] &&
-            positions[blockAbove].x[0] == arguments[moveDown].x[0]) {
+         if (positions[blockAbove].y[0] <= usableArgs[moveDown].y[0] &&
+            positions[blockAbove].x[0] == usableArgs[moveDown].x[0]) {
             moveOneDown(blockAbove);
             recheck.push(positions[blockAbove]);
          }
