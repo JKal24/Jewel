@@ -226,7 +226,7 @@ function checkSpaces(obj) {
          if (cleaned) {
             remove(obj.id);
             clean(obj.id);
-            realignBlocks(obj, upper, lower);
+            realignBlocks(obj, upper[0], lower[0], closeObj[piece]);
          }
       }
       cleaned = false;
@@ -264,7 +264,8 @@ function cleaner(ele) {
 }
 
 function realignBlocks() {
-   usableArgs = arguments.filter(arg => arg.length > 0);
+   usableArgs = [].slice.call(arguments);
+   usableArgs = usableArgs.filter(arg => arg != undefined);
    let recheck = [];
    for (let moveDown = 0; moveDown < usableArgs.length; moveDown++) {
       for (let blockAbove = 0; blockAbove < positions.length; 
