@@ -158,9 +158,14 @@ function checkSpaces(obj) {
             /* cases one row above */
 
             case obj.y[0] - 1:
+
                switch (closeObj[piece].x[0]) {
+
+                  /* cases in the same column */
+
                   case obj.x[0]:
-                     loop: for (scale = 1; scale < positions.length - 3; scale++) {
+
+                     loop: for (scale = 1; scale < positions.length - 2; scale++) {
                         potentialcase = positions.filter(box => (box.y[0] == obj.y[0] + scale) && (box.x[0] == obj.x[0]) && (box.colour == obj.colour));
                         if ((potentialcase).length > 0) {
                            myCases.push(potentialcase[0]);
@@ -169,7 +174,7 @@ function checkSpaces(obj) {
                         }
                      }
 
-                     loop2: for (scalerev = -1; scalerev > (-(positions.length - 3)); scalerev--) {
+                     loop2: for (scalerev = -2; scalerev > (-(positions.length - 2)); scalerev--) {
                         potentialcase = positions.filter((box.x[0] == obj.x[0]) && (box.y[0] == obj.y[0] + scalerev) && (box.colour == obj.colour));
                         if ((potentialcase).length > 0) {
                            myCases.push(potentialcase[0]);
@@ -180,22 +185,54 @@ function checkSpaces(obj) {
 
                      cleaned = check_remove_clean(myCases);
                      break;
+
+                  /* cases one column right */
+
                   case obj.x[0] + 1:
-                     
-                     upper = positions.filter(box => (box.x[0] ==
-                        obj.x[0] - 1) && (box.y[0] == obj.y[0] - 1) && (box.colour == obj.colour));
-                     lower = positions.filter(box => (box.x[0] ==
-                        obj.x[0] + 2) && (box.y[0] == obj.y[0] + 2) && (box.colour == obj.colour))
 
-                     cleaned = check_remove_clean(upper, lower, closeObj[piece]);
+                     loop: for (scale = 1; scale < positions.length - 2; scale++) {
+                        potentialcase = positions.filter(box => (box.y[0] == obj.y[0] + scale) && (box.x[0] == obj.x[0] - scale) && (box.colour == obj.colour));
+                        if ((potentialcase).length > 0) {
+                           myCases.push(potentialcase[0]);
+                        } else {
+                           break loop;
+                        }
+                     }
+
+                     loop2: for (scalerev = -2; scalerev > (-(positions.length - 2)); scalerev--) {
+                        potentialcase = positions.filter((box.x[0] == obj.x[0] - scalerev) && (box.y[0] == obj.y[0] + scalerev) && (box.colour == obj.colour));
+                        if ((potentialcase).length > 0) {
+                           myCases.push(potentialcase[0]);
+                        } else {
+                           break loop2;
+                        }
+                     }
+
+                     cleaned = check_remove_clean(myCases);
                      break;
-                  case obj.x[0] - 1:
-                     upper = positions.filter(box => (box.x[0] ==
-                        obj.x[0] + 1) && (box.y[0] == obj.y[0] - 1) && (box.colour == obj.colour));
-                     lower = positions.filter(box => (box.x[0] ==
-                        obj.x[0] - 2) && (box.y[0] == obj.y[0] + 2) && (box.colour == obj.colour))
 
-                     cleaned = check_remove_clean(upper, lower, closeObj[piece]);
+                  /* cases one column left */
+
+                  case obj.x[0] - 1:
+                     loop: for (scale = 1; scale < positions.length - 2; scale++) {
+                        potentialcase = positions.filter(box => (box.y[0] == obj.y[0] + scale) && (box.x[0] == obj.x[0] + scale) && (box.colour == obj.colour));
+                        if ((potentialcase).length > 0) {
+                           myCases.push(potentialcase[0]);
+                        } else {
+                           break loop;
+                        }
+                     }
+
+                     loop2: for (scalerev = -2; scalerev > (-(positions.length - 2)); scalerev--) {
+                        potentialcase = positions.filter((box.x[0] == obj.x[0] + scalerev) && (box.y[0] == obj.y[0] + scalerev) && (box.colour == obj.colour));
+                        if ((potentialcase).length > 0) {
+                           myCases.push(potentialcase[0]);
+                        } else {
+                           break loop2;
+                        }
+                     }
+
+                     cleaned = check_remove_clean(myCases);
                      break;
                }
                break;
@@ -250,55 +287,40 @@ function checkSpaces(obj) {
             } else {
                points += 1;
             }
-            remove(obj.id);
+            clean(closeObj[piece].id);
             clean(obj.id);
             $("#score").text("Score: " + points.toString());
-            realignBlocks(obj, upper[0], lower[0], closeObj[piece]);
+            myCases.push(obj, closeObj[piece]);
+            realignBlocks(myCases);
          }
       }
       cleaned = false;
    }
 }
 
-function remove(Id) {
-   positions = positions.filter(obj => obj.id != Id);
-}
-
 function clean(Id) {
+   positions = positions.filter(obj => obj.id != Id);
    board.removeChild(document.getElementById(Id));
 }
 
-function check_remove_clean(u, l, o) {
-   if (u.length == 1) {
-      cleaner(u[0]);
-      if (l.length == 1) {
-         cleaner(l[0]);
-      }
-      cleaner(o);
-      return true;
+function check_remove_clean(arr) {
+   if (arr.length == 0) {
+      return false;
    }
-   if (l.length == 1) {
-      cleaner(l[0]);
-      cleaner(o);
-      return true;
+
+   for (let ele = 0; ele < arr.length; ele++) {
+      clean(ele.id);
    }
-   return false;
+   return true;
 }
 
-function cleaner(ele) {
-   remove(ele.id);
-   clean(ele.id);
-}
-
-function realignBlocks() {
-   usableArgs = [].slice.call(arguments);
-   usableArgs = usableArgs.filter(arg => arg != undefined);
+function realignBlocks(identifiedBlocks) {
    let recheck = [];
-   for (let moveDown = 0; moveDown < usableArgs.length; moveDown++) {
+   for (let moveDown = 0; moveDown < identifiedBlocks.length; moveDown++) {
       for (let blockAbove = 0; blockAbove < positions.length; 
          blockAbove++) {
-         if (positions[blockAbove].y[0] <= usableArgs[moveDown].y[0] &&
-            positions[blockAbove].x[0] == usableArgs[moveDown].x[0]) {
+         if (positions[blockAbove].y[0] <= identifiedBlocks[moveDown].y[0] &&
+            positions[blockAbove].x[0] == identifiedBlocks[moveDown].x[0]) {
             moveOneDown(blockAbove);
             recheck.push(positions[blockAbove]);
          }
