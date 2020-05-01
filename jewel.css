@@ -16,6 +16,14 @@
    font-size: 18px;
 }
 
+#difficulty {
+   display: hidden;
+   height: 100%;
+   width: 100%;
+   position: absolute;
+   text-align: center;
+}
+
 .box {
    height: 50px;
    width: 50px;
@@ -44,4 +52,35 @@
    width: 100%;
    position: absolute;
    text-align: center;
+}
+
+p:first-child {
+   font-size: 25px;
+}
+
+p:nth-child(2) {
+   font-size: 18px;
+}
+
+#grayblock {
+   background-color: #999999;
+}
+
+#darkredblock {
+   background-color: #800000;
+}
+
+#darkgreenblock {
+   background-color: #808000;
+}
+
+#yellowblock {
+   background-color: #FFFF00;
+}
+
+#salmonblock {
+   background-color:#FA8072;
+}
+#redblock {
+   background-color: #FF0000;
 }

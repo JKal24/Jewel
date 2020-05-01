@@ -1,14 +1,6 @@
 let positions = [];
 let id = 0;
-let colours = ["#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#FF0000", "#800000", "#800000", "#800000", "#800000", "#800000", "#800000", "#800000", "#FFFF00", "#FFFF00", "#FFFF00", "#FFFF00", "#FFFF00", "#808000", "#808000", "#808000", "#FA8072", "#FA8072", "#999999"]
-let pointValue = {
-   "#FF0000" : 1,
-   "#800000" : 2,
-   "#FFFF00" : 3,
-   "#808000" : 5,
-   "#FA8072" : 7,
-   "#999999" : 10
-}
+let colours = ["#FF0000", "#FF0000", "#FA8072", "#FA8072", "#FFFF00", "#FFFF00", "#808000", "#808000", "#808000", "#800000", "#999999"]
 let board = document.getElementById("board");
 let iteration;
 let points = 0;
@@ -27,6 +19,7 @@ function initializeBoard() {
 $(document).ready(function () {
    $("#endContainer").hide();
    $("#score").hide();
+   $("#difficulty").hide();
    $("#startButton").click(function () {
       $("#startContainer").hide();
       initializeBoard();
@@ -59,7 +52,7 @@ function createPiece() {
 
    /* give the element a position on the grid */
    let rand = (Math.floor(Math.random() * 8)) + 1;
-   let cl = Math.floor(Math.random() * (colours.length - 1));
+   let cl = Math.floor(Math.random() * (colours.length));
    let position = {
       x: [rand, rand + 1],
       y: [2, 3],
@@ -147,6 +140,8 @@ function checkBreaker(obj) {
 function checkSpaces(obj) {
    let upper;
    let lower;
+   let myCases;
+   let potentialcase;
    let cleaned = false;
    let closeObj = positions.filter(Obj => ((obj.id != Obj.id) &&
       (Math.ceil((Math.abs(Obj.x[0] - obj.x[0])) <= 1) &&
@@ -162,17 +157,31 @@ function checkSpaces(obj) {
 
             /* cases one row above */
 
-            case obj.y[0] + 1:
+            case obj.y[0] - 1:
                switch (closeObj[piece].x[0]) {
                   case obj.x[0]:
-                     upper = positions.filter(box => (box.x[0] ==
-                        obj.x[0]) && (box.y[0] == obj.y[0] - 1) && (box.colour == obj.colour));
-                     lower = positions.filter(box => (box.x[0] ==
-                        obj.x[0]) && (box.y[0] == obj.y[0] + 2) && (box.colour == obj.colour))
+                     loop: for (scale = 1; scale < positions.length - 3; scale++) {
+                        potentialcase = positions.filter(box => (box.y[0] == obj.y[0] + scale) && (box.x[0] == obj.x[0]) && (box.colour == obj.colour));
+                        if ((potentialcase).length > 0) {
+                           myCases.push(potentialcase[0]);
+                        } else {
+                           break loop;
+                        }
+                     }
 
-                     cleaned = check_remove_clean(upper, lower, closeObj[piece]);
+                     loop2: for (scalerev = -1; scalerev > (-(positions.length - 3)); scalerev--) {
+                        potentialcase = positions.filter((box.x[0] == obj.x[0]) && (box.y[0] == obj.y[0] + scalerev) && (box.colour == obj.colour));
+                        if ((potentialcase).length > 0) {
+                           myCases.push(potentialcase[0]);
+                        } else {
+                           break loop2;
+                        }
+                     }
+
+                     cleaned = check_remove_clean(myCases);
                      break;
                   case obj.x[0] + 1:
+                     
                      upper = positions.filter(box => (box.x[0] ==
                         obj.x[0] - 1) && (box.y[0] == obj.y[0] - 1) && (box.colour == obj.colour));
                      lower = positions.filter(box => (box.x[0] ==
@@ -236,9 +245,13 @@ function checkSpaces(obj) {
                break;
          }
          if (cleaned) {
+            if (obj.colour == "#999999") {
+               points += 3;
+            } else {
+               points += 1;
+            }
             remove(obj.id);
             clean(obj.id);
-            points += pointValue.obj.colour;
             $("#score").text("Score: " + points.toString());
             realignBlocks(obj, upper[0], lower[0], closeObj[piece]);
          }
