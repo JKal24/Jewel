@@ -138,11 +138,11 @@ function checkBreaker(obj) {
 }
 
 function checkSpaces(obj) {
-   let upper;
-   let lower;
-   let myCases;
+   let myCases = [];
    let potentialcase;
+   let afterCases = [];
    let cleaned = false;
+   let cleanobj = false;
    let closeObj = positions.filter(Obj => ((obj.id != Obj.id) &&
       (Math.ceil((Math.abs(Obj.x[0] - obj.x[0])) <= 1) &&
          (Math.ceil(Math.abs(Obj.y[0] - obj.y[0])) <= 1))));
@@ -155,9 +155,9 @@ function checkSpaces(obj) {
       if (closeObj[piece].colour == obj.colour) {
          switch (closeObj[piece].y[0]) {
 
-            /* cases one row above */
+            /* cases one row below */
 
-            case obj.y[0] - 1:
+            case obj.y[0] + 1:
 
                switch (closeObj[piece].x[0]) {
 
@@ -165,21 +165,12 @@ function checkSpaces(obj) {
 
                   case obj.x[0]:
 
-                     loop: for (scale = 1; scale < positions.length - 2; scale++) {
+                     loop: for (scale = 2; scale < positions.length; scale++) {
                         potentialcase = positions.filter(box => (box.y[0] == obj.y[0] + scale) && (box.x[0] == obj.x[0]) && (box.colour == obj.colour));
                         if ((potentialcase).length > 0) {
                            myCases.push(potentialcase[0]);
                         } else {
                            break loop;
-                        }
-                     }
-
-                     loop2: for (scalerev = -2; scalerev > (-(positions.length - 2)); scalerev--) {
-                        potentialcase = positions.filter((box.x[0] == obj.x[0]) && (box.y[0] == obj.y[0] + scalerev) && (box.colour == obj.colour));
-                        if ((potentialcase).length > 0) {
-                           myCases.push(potentialcase[0]);
-                        } else {
-                           break loop2;
                         }
                      }
 
@@ -190,8 +181,8 @@ function checkSpaces(obj) {
 
                   case obj.x[0] + 1:
 
-                     loop: for (scale = 1; scale < positions.length - 2; scale++) {
-                        potentialcase = positions.filter(box => (box.y[0] == obj.y[0] + scale) && (box.x[0] == obj.x[0] - scale) && (box.colour == obj.colour));
+                     loop: for (scale = 2; scale < positions.length; scale++) {
+                        potentialcase = positions.filter(box => (box.y[0] == obj.y[0] + scale) && (box.x[0] == obj.x[0] + scale) && (box.colour == obj.colour));
                         if ((potentialcase).length > 0) {
                            myCases.push(potentialcase[0]);
                         } else {
@@ -199,8 +190,8 @@ function checkSpaces(obj) {
                         }
                      }
 
-                     loop2: for (scalerev = -2; scalerev > (-(positions.length - 2)); scalerev--) {
-                        potentialcase = positions.filter((box.x[0] == obj.x[0] - scalerev) && (box.y[0] == obj.y[0] + scalerev) && (box.colour == obj.colour));
+                     loop2: for (scalerev = -1; scalerev > (-(positions.length - 1)); scalerev--) {
+                        potentialcase = positions.filter(box => (box.x[0] == obj.x[0] + scalerev) && (box.y[0] == obj.y[0] + scalerev) && (box.colour == obj.colour));
                         if ((potentialcase).length > 0) {
                            myCases.push(potentialcase[0]);
                         } else {
@@ -214,8 +205,8 @@ function checkSpaces(obj) {
                   /* cases one column left */
 
                   case obj.x[0] - 1:
-                     loop: for (scale = 1; scale < positions.length - 2; scale++) {
-                        potentialcase = positions.filter(box => (box.y[0] == obj.y[0] + scale) && (box.x[0] == obj.x[0] + scale) && (box.colour == obj.colour));
+                     loop: for (scale = 1; scale < positions.length - 1; scale++) {
+                        potentialcase = positions.filter(box => (box.y[0] == obj.y[0] - scale) && (box.x[0] == obj.x[0] + scale) && (box.colour == obj.colour));
                         if ((potentialcase).length > 0) {
                            myCases.push(potentialcase[0]);
                         } else {
@@ -223,8 +214,8 @@ function checkSpaces(obj) {
                         }
                      }
 
-                     loop2: for (scalerev = -2; scalerev > (-(positions.length - 2)); scalerev--) {
-                        potentialcase = positions.filter((box.x[0] == obj.x[0] + scalerev) && (box.y[0] == obj.y[0] + scalerev) && (box.colour == obj.colour));
+                     loop2: for (scalerev = -2; scalerev > (-(positions.length)); scalerev--) {
+                        potentialcase = positions.filter(box => (box.x[0] == obj.x[0] + scalerev) && (box.y[0] == obj.y[0] + scalerev) && (box.colour == obj.colour));
                         if ((potentialcase).length > 0) {
                            myCases.push(potentialcase[0]);
                         } else {
@@ -236,49 +227,35 @@ function checkSpaces(obj) {
                      break;
                }
                break;
-            /* cases one row below */
 
-            case obj.y[0] - 1:
-               switch (closeObj[piece].x[0]) {
-                  case obj.x[0] + 1:
-                     upper = positions.filter(box => (box.x[0] ==
-                        obj.x[0] + 2) && (box.y[0] == obj.y[0] - 2) && (box.colour == obj.colour));
-                     lower = positions.filter(box => (box.x[0] ==
-                        obj.x[0] - 1) && (box.y[0] == obj.y[0] + 1) && (box.colour == obj.colour))
-
-                     cleaned = check_remove_clean(upper, lower, closeObj[piece]);
-                     break;
-                  case obj.x[0] - 1:
-                     upper = positions.filter(box => (box.x[0] ==
-                        obj.x[0] - 2) && (box.y[0] == obj.y[0] - 2) && (box.colour == obj.colour));
-                     lower = positions.filter(box => (box.x[0] ==
-                        obj.x[0] - 1) && (box.y[0] == obj.y[0] + 1) && (box.colour == obj.colour))
-
-                     cleaned = check_remove_clean(upper, lower, closeObj[piece]);
-                     break;
-               }
-               break;
             /* cases on the same row */
 
             case obj.y[0]:
                switch (closeObj[piece].x[0]) {
                   case obj.x[0] + 1:
-                     upper = positions.filter(box => (box.x[0] ==
-                        obj.x[0] + 2) && (box.y[0] == obj.y[0]) && (box.colour == obj.colour));
-                     lower = positions.filter(box => (box.x[0] ==
-                        obj.x[0] - 1) && (box.y[0] == obj.y[0]) && (box.colour == obj.colour))
+                     loop: for (scale = 2; scale < positions.length; scale++) {
+                        potentialcase = positions.filter(box => (box.y[0] == obj.y[0]) && (box.x[0] == obj.x[0] + scale) && (box.colour == obj.colour));
+                        if ((potentialcase).length > 0) {
+                           myCases.push(potentialcase[0]);
+                        } else {
+                           break loop;
+                        }
+                     }
 
-                     cleaned = check_remove_clean(upper, lower, closeObj[piece]);
-                     break;
-                  case obj.x[0] - 1:
-                     upper = positions.filter(box => (box.x[0] ==
-                        obj.x[0] - 2) && (box.y[0] == obj.y[0]) && (box.colour == obj.colour));
-                     lower = positions.filter(box => (box.x[0] ==
-                        obj.x[0] + 1) && (box.y[0] == obj.y[0]) && (box.colour == obj.colour))
+                     loop2: for (scalerev = -1; scalerev > (-(positions.length - 1)); scalerev--) {
+                        potentialcase = positions.filter(box => (box.x[0] == obj.x[0] + scalerev) && (box.y[0] == obj.y[0]) 
+                        && (box.colour == obj.colour));
+                        if ((potentialcase).length > 0) {
+                           myCases.concat(potentialcase);
+                        } else {
+                           break loop2;
+                        }
+                     }
 
-                     cleaned = check_remove_clean(upper, lower, closeObj[piece]);
+                     cleaned = check_remove_clean(myCases);
                      break;
                }
+               
                break;
          }
          if (cleaned) {
@@ -287,14 +264,18 @@ function checkSpaces(obj) {
             } else {
                points += 1;
             }
+            cleanobj = true;
             clean(closeObj[piece].id);
-            clean(obj.id);
             $("#score").text("Score: " + points.toString());
-            myCases.push(obj, closeObj[piece]);
-            realignBlocks(myCases);
+            myCases.push(closeObj[piece]);
+            afterCases.concat(realignBlocks(myCases));
          }
       }
-      cleaned = false;
+   }
+   if (cleanobj) {
+      clean(obj.id);
+      afterCases.concat(realignBlocks([obj]));
+      recheckSpaces(afterCases);
    }
 }
 
@@ -326,9 +307,12 @@ function realignBlocks(identifiedBlocks) {
          }
       }
    }
+   return recheck;
+}
 
+function recheckSpaces(arr) {
    for (let checkNewBreaks = 0; checkNewBreaks < recheck.length; checkNewBreaks++) {
-      checkSpaces(recheck[checkNewBreaks]);
+      checkSpaces(arr[checkNewBreaks]);
    }
 }
 
