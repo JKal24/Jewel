@@ -1,7 +1,7 @@
 let positions = [];
 let id = 0;
 let colours = ["#FF0000", "#FF0000", "#FA8072", "#FA8072", "#FFFF00", "#FFFF00", "#808000", "#808000", "#808000", "#800000", "#999999"]
-let board = document.getElementById("board");
+let board;
 let iteration;
 let points = 0;
 
@@ -14,6 +14,7 @@ function initializeBoard() {
    $("#board").height = window.innerHeight;
    $("#score").show();
    $("#score").text("Score: " + points.toString());
+   board = document.getElementById("board");
 }
 
 $(document).ready(function () {
@@ -123,7 +124,7 @@ function checkBreaker(obj) {
    if (obj.y[0] >= 11 || (positions.filter
       (proximity => (proximity.y[0] == (obj.y[0] + 1)) && (proximity.x[0] == obj.x[0]))).length != 0) {
 
-      if ((positions.filter(gameOver => (gameOver.y[0] == obj.y[0]) && (gameOver.x[0] == obj.x[0]) && (obj.y[0] <= 2))).length > 1) {
+      if ((positions.filter(gameOver => (gameOver.y[0] == obj.y[0]) && (gameOver.x[0] == obj.x[0]) && (obj.y[0] <= 3))).length > 1) {
          gameOver();
          return;
       }
@@ -205,8 +206,8 @@ function checkSpaces(obj) {
                   /* cases one column left */
 
                   case obj.x[0] - 1:
-                     loop: for (scale = 1; scale < positions.length - 1; scale++) {
-                        potentialcase = positions.filter(box => (box.y[0] == obj.y[0] - scale) && (box.x[0] == obj.x[0] + scale) && (box.colour == obj.colour));
+                     loop: for (scale = 2; scale < positions.length - 1; scale++) {
+                        potentialcase = positions.filter(box => (box.y[0] == obj.y[0] + scale) && (box.x[0] == obj.x[0] - scale) && (box.colour == obj.colour));
                         if ((potentialcase).length > 0) {
                            myCases.push(potentialcase[0]);
                         } else {
@@ -214,8 +215,8 @@ function checkSpaces(obj) {
                         }
                      }
 
-                     loop2: for (scalerev = -2; scalerev > (-(positions.length)); scalerev--) {
-                        potentialcase = positions.filter(box => (box.x[0] == obj.x[0] + scalerev) && (box.y[0] == obj.y[0] + scalerev) && (box.colour == obj.colour));
+                     loop2: for (scalerev = -1; scalerev > (-(positions.length)); scalerev--) {
+                        potentialcase = positions.filter(box => (box.x[0] == obj.x[0] - scalerev) && (box.y[0] == obj.y[0] + scalerev) && (box.colour == obj.colour));
                         if ((potentialcase).length > 0) {
                            myCases.push(potentialcase[0]);
                         } else {
@@ -246,9 +247,22 @@ function checkSpaces(obj) {
                         potentialcase = positions.filter(box => (box.x[0] == obj.x[0] + scalerev) && (box.y[0] == obj.y[0]) 
                         && (box.colour == obj.colour));
                         if ((potentialcase).length > 0) {
-                           myCases.concat(potentialcase);
+                           myCases.push(potentialcase[0]);
                         } else {
                            break loop2;
+                        }
+                     }
+
+                     cleaned = check_remove_clean(myCases);
+                     break;
+                  
+                  case obj.x[0] - 1:
+                     loop: for (scale = 2; scale < positions.length; scale++) {
+                        potentialcase = positions.filter(box => (box.y[0] == obj.y[0]) && (box.x[0] == obj.x[0] - scale) && (box.colour == obj.colour));
+                        if ((potentialcase).length > 0) {
+                           myCases.push(potentialcase[0]);
+                        } else {
+                           break loop;
                         }
                      }
 
@@ -268,13 +282,14 @@ function checkSpaces(obj) {
             clean(closeObj[piece].id);
             $("#score").text("Score: " + points.toString());
             myCases.push(closeObj[piece]);
-            afterCases.concat(realignBlocks(myCases));
+            afterCases = afterCases.concat(realignBlocks(myCases, obj));
+            myCases = [];
          }
       }
    }
    if (cleanobj) {
       clean(obj.id);
-      afterCases.concat(realignBlocks([obj]));
+      afterCases = afterCases.concat(realignBlocks([obj], obj));
       recheckSpaces(afterCases);
    }
 }
@@ -290,18 +305,18 @@ function check_remove_clean(arr) {
    }
 
    for (let ele = 0; ele < arr.length; ele++) {
-      clean(ele.id);
+      clean(arr[ele].id);
    }
    return true;
 }
 
-function realignBlocks(identifiedBlocks) {
+function realignBlocks(identifiedBlocks, obj) {
    let recheck = [];
    for (let moveDown = 0; moveDown < identifiedBlocks.length; moveDown++) {
       for (let blockAbove = 0; blockAbove < positions.length; 
          blockAbove++) {
-         if (positions[blockAbove].y[0] <= identifiedBlocks[moveDown].y[0] &&
-            positions[blockAbove].x[0] == identifiedBlocks[moveDown].x[0]) {
+         if (positions[blockAbove].y[0] <= identifiedBlocks[moveDown].y[0] && positions[blockAbove].x[0] == identifiedBlocks[moveDown].x[0] 
+         && positions[blockAbove].id != obj.id) {
             moveOneDown(blockAbove);
             recheck.push(positions[blockAbove]);
          }
@@ -311,7 +326,8 @@ function realignBlocks(identifiedBlocks) {
 }
 
 function recheckSpaces(arr) {
-   for (let checkNewBreaks = 0; checkNewBreaks < recheck.length; checkNewBreaks++) {
+   for (let checkNewBreaks = 0; checkNewBreaks < arr.length; 
+      checkNewBreaks++) {
       checkSpaces(arr[checkNewBreaks]);
    }
 }
