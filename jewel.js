@@ -15,18 +15,24 @@ function initializeBoard() {
    $("#score").show();
    $("#score").text("Score: " + points.toString());
    board = document.getElementById("board");
+   createPiece();
 }
+
+/* screen helpers that help explain the points system, choose difficulty and start the game */
 
 $(document).ready(function () {
    $("#endContainer").hide();
-   $("#score").hide();
+   $("#board").hide();
    $("#difficulty").hide();
+
+   /* information about points system on the start container*/
    $("#startButton").click(function () {
       $("#startContainer").hide();
       initializeBoard();
-      createPiece();
       iteration = setInterval(movement, 200);
    });
+
+
    $("#restartButton").click(function () {
       $("#endContainer").hide();
       initializeBoard();
@@ -46,6 +52,14 @@ $(document).ready(function () {
    });
 });
 
+function initializeDifficulty(speed) {
+   $("#difficulty").hide();
+   initializeBoard();
+   iteration = setInterval(movement, speed);
+}
+
+/* creating a jewel that is deployed on the board element with a colour and position near the top, below the scoreboard */
+
 function createPiece() {
    /* create a new element to be inserted */
    let newPiece = document.createElement('div');
@@ -54,6 +68,7 @@ function createPiece() {
    /* give the element a position on the grid */
    let rand = (Math.floor(Math.random() * 8)) + 1;
    let cl = Math.floor(Math.random() * (colours.length));
+   console.log(cl, colours.length);
    let position = {
       x: [rand, rand + 1],
       y: [2, 3],
@@ -116,56 +131,4 @@ function intervalChange() {
    clearInterval(iteration);
    createPiece();
    iteration = setInterval(movement, 200);
-}
-
-function clean(Id) {
-   positions = positions.filter(obj => obj.id != Id);
-   board.removeChild(document.getElementById(Id));
-}
-
-function check_remove_clean(arr) {
-   if (arr.length == 0) {
-      return false;
-   }
-
-   for (let ele = 0; ele < arr.length; ele++) {
-      clean(arr[ele].id);
-   }
-   return true;
-}
-
-function realignBlocks(identifiedBlocks, obj) {
-   let recheck = [];
-   for (let moveDown = 0; moveDown < identifiedBlocks.length; moveDown++) {
-      for (let blockAbove = 0; blockAbove < positions.length; 
-         blockAbove++) {
-         if (positions[blockAbove].y[0] <= identifiedBlocks[moveDown].y[0] && positions[blockAbove].x[0] == identifiedBlocks[moveDown].x[0] 
-         && positions[blockAbove].id != obj.id) {
-            moveOneDown(blockAbove);
-            recheck.push(positions[blockAbove]);
-         }
-      }
-   }
-   return recheck;
-}
-
-function recheckSpaces(arr) {
-   for (let checkNewBreaks = 0; checkNewBreaks < arr.length; 
-      checkNewBreaks++) {
-      checkSpaces(arr[checkNewBreaks]);
-   }
-}
-
-function gameOver() {
-   clearInterval(iteration);
-   $(board).hide();
-   $("#endContainer").show();
-   board.remove();
-
-   board = document.createElement('div');
-   $(board).attr('id', "board");
-   document.body.appendChild(board);
-
-   positions = [];
-   id = 0;
 }
