@@ -166,8 +166,9 @@ function increment(one, two) {
 }
 
 function clean(Id) {
-   positions = positions.filter(obj => obj.id != Id);
    board.removeChild(document.getElementById(Id));
+   
+   positions = positions.filter(obj => obj.id != Id);
 }
 
 function check_remove_clean(arr) {

@@ -4,6 +4,7 @@ let colours = ["#FF0000", "#FF0000", "#FA8072", "#FA8072", "#FFFF00", "#FFFF00",
 let board;
 let iteration;
 let points = 0;
+let speed;
 
 /* initialization of my board and creation of elements */
 function initializeBoard() {
@@ -26,18 +27,40 @@ $(document).ready(function () {
    $("#difficulty").hide();
 
    /* information about points system on the start container*/
-   $("#startButton").click(function () {
+   $("#startButton").click(function() {
       $("#startContainer").hide();
-      initializeBoard();
-      iteration = setInterval(movement, 200);
-   });
 
+      /* the difficulty menu is shown */
+      $("#difficulty").show();
+      $("#easy").click(function() {
+         speed = 300;
+         initializeDifficulty(speed);
+      });
+      $("#medium").click(function() {
+         speed = 200;
+         initializeDifficulty(speed);
+      })
+      $("#hard").click(function() {
+         speed = 100;
+         initializeDifficulty(speed);
+      })
+   });
 
    $("#restartButton").click(function () {
       $("#endContainer").hide();
-      initializeBoard();
-      createPiece();
-      iteration = setInterval(movement, 200);
+      $("#difficulty").show();
+      $("#easy").click(function() {
+         speed = 300;
+         initializeDifficulty(speed);
+      });
+      $("#medium").click(function() {
+         speed = 200;
+         initializeDifficulty(speed);
+      })
+      $("#hard").click(function() {
+         speed = 100;
+         initializeDifficulty(speed);
+      })
    });
    $("body").on("keydown", function (e) {
       switch (e.which) {
@@ -52,10 +75,10 @@ $(document).ready(function () {
    });
 });
 
-function initializeDifficulty(speed) {
+function initializeDifficulty(mySpeed) {
    $("#difficulty").hide();
    initializeBoard();
-   iteration = setInterval(movement, speed);
+   iteration = setInterval(movement, mySpeed);
 }
 
 /* creating a jewel that is deployed on the board element with a colour and position near the top, below the scoreboard */
@@ -130,5 +153,5 @@ function noCollision(obj, direc) {
 function intervalChange() {
    clearInterval(iteration);
    createPiece();
-   iteration = setInterval(movement, 200);
+   iteration = setInterval(movement, speed);
 }

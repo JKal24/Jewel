@@ -5,6 +5,8 @@
    grid-template-columns: repeat(8, 1fr);
    grid-template-rows: repeat(14, 1fr);
    background-color: lightblue;
+   column-gap: 10px;
+   row-gap: 10px;
 }
 
 #score {
@@ -36,6 +38,19 @@
    text-align: center;
 }
 
+.flex {
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: center;
+}
+
+.flexmain {
+   display: flex;
+   flex-direction: column;
+   flex-wrap: wrap;
+   justify-content: center;
+}
+
 #btn {
    display:inline-block;
    text-align: center;
@@ -64,23 +79,29 @@ p:nth-child(2) {
 
 #grayblock {
    background-color: #999999;
+   margin: 10px;
 }
 
 #darkredblock {
    background-color: #800000;
+   margin: 10px;
 }
 
 #darkgreenblock {
    background-color: #808000;
+   margin: 10px;
 }
 
 #yellowblock {
    background-color: #FFFF00;
+   margin: 10px;
 }
 
 #salmonblock {
    background-color:#FA8072;
+   margin: 10px;
 }
 #redblock {
    background-color: #FF0000;
+   margin: 10px;
 }
