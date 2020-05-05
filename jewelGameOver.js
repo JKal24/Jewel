@@ -2,7 +2,7 @@ function gameOver() {
    clearInterval(iteration);
    $(board).hide();
    $("#endContainer").show();
-   board.remove();
+   $(board).remove();
 
    board = document.createElement('div');
    $(board).attr('id', "board");
