@@ -1,13 +1,16 @@
 function gameOver() {
-   clearInterval(iteration);
    $(board).hide();
    $("#endContainer").show();
-   $(board).remove();
+   $("#roundScore").text('Your score was: ' + points.toString());
+   if (points > highestPoints) {
+      highestPoints = points;
+   }
+   $("#bestScore").text('Highest score: ' + highestPoints.toString());
+   $(board).html('');
 
-   board = document.createElement('div');
-   $(board).attr('id', "board");
-   document.body.appendChild(board);
+   $("body").off("keydown");
 
+   points = 0;
    positions = [];
    id = 0;
 }

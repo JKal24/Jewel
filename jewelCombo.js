@@ -5,6 +5,7 @@ function checkBreaker(obj) {
       (proximity => (proximity.y[0] == (obj.y[0] + 1)) && (proximity.x[0] == obj.x[0]))).length != 0) {
 
       if ((positions.filter(gameOver => (gameOver.y[0] == obj.y[0]) && (gameOver.x[0] == obj.x[0]) && (obj.y[0] <= 3))).length > 1) {
+         clearInterval(iteration);
          gameOver();
          return;
       }
@@ -166,6 +167,8 @@ function increment(one, two) {
 }
 
 function clean(Id) {
+   $("#" + Id).fadeOut();
+
    board.removeChild(document.getElementById(Id));
    
    positions = positions.filter(obj => obj.id != Id);

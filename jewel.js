@@ -4,6 +4,7 @@ let colours = ["#FF0000", "#FF0000", "#FA8072", "#FA8072", "#FFFF00", "#FFFF00",
 let board;
 let iteration;
 let points = 0;
+let highestPoints = 0;
 let speed;
 
 /* initialization of my board and creation of elements */
@@ -17,6 +18,17 @@ function initializeBoard() {
    $("#score").text("Score: " + points.toString());
    board = document.getElementById("board");
    createPiece();
+   $("body").on("keydown", function (e) {
+      switch (e.which) {
+         case 37:
+            moveSides(-1);
+            checkBreaker(positions[positions.length - 1]);
+            break;
+         case 39:
+            moveSides(1);
+            checkBreaker(positions[positions.length - 1]);
+      }
+   });
 }
 
 /* screen helpers that help explain the points system, choose difficulty and start the game */
@@ -32,47 +44,28 @@ $(document).ready(function () {
 
       /* the difficulty menu is shown */
       $("#difficulty").show();
-      $("#easy").click(function() {
-         speed = 300;
-         initializeDifficulty(speed);
-      });
-      $("#medium").click(function() {
-         speed = 200;
-         initializeDifficulty(speed);
-      })
-      $("#hard").click(function() {
-         speed = 100;
-         initializeDifficulty(speed);
-      })
    });
 
    $("#restartButton").click(function () {
       $("#endContainer").hide();
+
+      /* the difficulty menu is shown */
       $("#difficulty").show();
-      $("#easy").click(function() {
-         speed = 300;
-         initializeDifficulty(speed);
-      });
-      $("#medium").click(function() {
-         speed = 200;
-         initializeDifficulty(speed);
-      })
-      $("#hard").click(function() {
-         speed = 100;
-         initializeDifficulty(speed);
-      })
    });
-   $("body").on("keydown", function (e) {
-      switch (e.which) {
-         case 37:
-            moveSides(-1);
-            checkBreaker(positions[positions.length - 1]);
-            break;
-         case 39:
-            moveSides(1);
-            checkBreaker(positions[positions.length - 1]);
-      }
+
+   /* the difficulty menu */
+   $("#easy").click(function() {
+      speed = 300;
+      initializeDifficulty(speed);
    });
+   $("#medium").click(function() {
+      speed = 200;
+      initializeDifficulty(speed);
+   })
+   $("#hard").click(function() {
+      speed = 100;
+      initializeDifficulty(speed);
+   })
 });
 
 function initializeDifficulty(mySpeed) {
