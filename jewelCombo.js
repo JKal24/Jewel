@@ -167,7 +167,11 @@ function increment(one, two) {
 }
 
 function clean(Id) {
-   $("#" + Id).fadeOut();
+   clearInterval(iteration);
+
+   $("#" + Id).fadeOut(100);
+
+   iteration = setInterval(movement, speed);
 
    board.removeChild(document.getElementById(Id));
    

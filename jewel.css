@@ -42,6 +42,7 @@
    display: flex;
    flex-wrap: wrap;
    justify-content: center;
+   border: 1px solid black;
 }
 
 .flexmain {
@@ -104,4 +105,40 @@ p:nth-child(2) {
 #redblock {
    background-color: #FF0000;
    margin: 10px;
+}
+
+@media only screen and (min-width: 500px) {
+   .box {
+      width: 30px;
+   }
+}
+
+@media only screen and (min-width: 1000px) {
+   .box { 
+      width: 60px;
+   }
+}
+
+@media only screen and (min-width: 1500px) {
+   .box {
+      width: 90px;
+   }
+}
+
+@media only screen and (min-height: 500px) {
+   .box {
+      height: 30px;
+   }
+}
+
+@media only screen and (min-height: 1000px) {
+   .box { 
+      height: 60px;
+   }
+}
+
+@media only screen and (min-height: 1500px) {
+   .box {
+      height: 90px;
+   }
 }

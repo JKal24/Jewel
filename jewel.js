@@ -84,7 +84,6 @@ function createPiece() {
    /* give the element a position on the grid */
    let rand = (Math.floor(Math.random() * 8)) + 1;
    let cl = Math.floor(Math.random() * (colours.length));
-   console.log(cl, colours.length);
    let position = {
       x: [rand, rand + 1],
       y: [2, 3],
