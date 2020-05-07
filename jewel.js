@@ -1,11 +1,12 @@
 let positions = [];
 let id = 0;
-let colours = ["#FF0000", "#FF0000", "#FA8072", "#FA8072", "#FFFF00", "#FFFF00", "#808000", "#808000", "#808000", "#800000", "#999999"]
+let colours = ["#FF0000", "#FF0000", "#FA8072", "#FA8072", "#FFFF00", "#FFFF00", "#006400", "#006400", "#800000", "#800000", "#8A2BE2", "#8A2BE2", "#999999"]
 let board;
 let iteration;
 let points = 0;
 let highestPoints = 0;
 let speed;
+let toBeRemoved = [];
 
 /* initialization of my board and creation of elements */
 function initializeBoard() {
@@ -82,7 +83,7 @@ function createPiece() {
    board.appendChild(newPiece);
 
    /* give the element a position on the grid */
-   let rand = (Math.floor(Math.random() * 8)) + 1;
+   let rand = (Math.floor(Math.random() * 12)) + 1;
    let cl = Math.floor(Math.random() * (colours.length));
    let position = {
       x: [rand, rand + 1],
@@ -123,7 +124,7 @@ function moveOneDown(int) {
 function moveSides(direc) {
    let objx = ($("#" + positions[positions.length - 1].id).css("grid-column")).split(" / ");
 
-   if ((objx[0] < 8 || (objx[0] == 8 && direc == -1)) && (objx[0] > 1 || (objx[0] == 1 && direc == 1))
+   if ((objx[0] < 12 || (objx[0] == 12 && direc == -1)) && (objx[0] > 1 || (objx[0] == 1 && direc == 1))
    && noCollision(positions[positions.length - 1], direc)) {
       positions[positions.length - 1].x = [parseInt(objx[0]) + direc,
       parseInt(objx[1]) + direc];

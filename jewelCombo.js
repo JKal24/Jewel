@@ -1,6 +1,7 @@
 /* check if there is a matching combination */
 
 function checkBreaker(obj) {
+   let fadeCheck = false;
    if (obj.y[0] >= 14 || (positions.filter
       (proximity => (proximity.y[0] == (obj.y[0] + 1)) && (proximity.x[0] == obj.x[0]))).length != 0) {
 
@@ -11,11 +12,16 @@ function checkBreaker(obj) {
       }
 
       if ((positions.filter(myObj => myObj.colour == obj.colour)).length >= 3) {
-         checkSpaces(obj);
+         fadeCheck = checkSpaces(obj);
       }
 
-      intervalChange();
-      return;
+      if (fadeCheck) {
+         clearInterval(iteration);
+         fadePieces(toBeRemoved);
+      } else {
+         intervalChange();
+         return;
+      }
    }
 }
 
@@ -103,7 +109,7 @@ function checkSpaces(obj) {
          }
          if (myCases.length > 0) {
             if (obj.colour == "#999999") {
-               points += 3;
+               points += 5;
             } else {
                points += 1;
             }
@@ -121,7 +127,9 @@ function checkSpaces(obj) {
       blocksToBeRealigned.push(obj);
       afterCases = afterCases.concat(realignBlocks(blocksToBeRealigned, obj));
       recheckSpaces(afterCases);
+      return true;
    }
+   return false;
 }
 
 function identify(num1, num2, num3, num4, obj) {
@@ -167,13 +175,7 @@ function increment(one, two) {
 }
 
 function clean(Id) {
-   clearInterval(iteration);
-
-   $("#" + Id).fadeOut(100);
-
-   iteration = setInterval(movement, speed);
-
-   board.removeChild(document.getElementById(Id));
+   toBeRemoved = toBeRemoved.concat(positions.filter(obj => obj.id == Id));
    
    positions = positions.filter(obj => obj.id != Id);
 }
