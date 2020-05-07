@@ -14,14 +14,7 @@ function checkBreaker(obj) {
       if ((positions.filter(myObj => myObj.colour == obj.colour)).length >= 3) {
          fadeCheck = checkSpaces(obj);
       }
-
-      if (fadeCheck) {
-         clearInterval(iteration);
-         fadePieces(toBeRemoved);
-      } else {
-         intervalChange();
-         return;
-      }
+      intervalChange();
    }
 }
 
@@ -127,9 +120,7 @@ function checkSpaces(obj) {
       blocksToBeRealigned.push(obj);
       afterCases = afterCases.concat(realignBlocks(blocksToBeRealigned, obj));
       recheckSpaces(afterCases);
-      return true;
    }
-   return false;
 }
 
 function identify(num1, num2, num3, num4, obj) {
@@ -175,7 +166,7 @@ function increment(one, two) {
 }
 
 function clean(Id) {
-   toBeRemoved = toBeRemoved.concat(positions.filter(obj => obj.id == Id));
+   board.removeChild(document.getElementById(Id));
    
    positions = positions.filter(obj => obj.id != Id);
 }
