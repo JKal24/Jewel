@@ -1,7 +1,6 @@
 /* check if there is a matching combination */
 
 function checkBreaker(obj) {
-   let fadeCheck = false;
    if (obj.y[0] >= 14 || (positions.filter
       (proximity => (proximity.y[0] == (obj.y[0] + 1)) && (proximity.x[0] == obj.x[0]))).length != 0) {
 
@@ -12,7 +11,7 @@ function checkBreaker(obj) {
       }
 
       if ((positions.filter(myObj => myObj.colour == obj.colour)).length >= 3) {
-         fadeCheck = checkSpaces(obj);
+         checkSpaces(obj);
       }
       intervalChange();
    }
